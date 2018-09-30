@@ -18,3 +18,15 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_DELETE_TOPIC_ENABLE: "true"
       KAFKA_CREATE_TOPICS: "Stocks:2:1,Quotes:2:1,Orders:2:1"
+  kafkaoffsetmonitor:
+    image: junxy/kafkaoffsetmonitor
+    container_name: offsetmonitor
+    restart: always
+    ports:
+    - 8080:8080
+    depends_on:
+    - zookeeper
+    - kafka
+    environment:
+      ZK_HOSTS: "zookeeper:2181"
+      KAFKA_BROKERS: "kafka:9092"
