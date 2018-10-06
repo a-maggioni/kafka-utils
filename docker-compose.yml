@@ -13,20 +13,30 @@ services:
     depends_on:
       - zookeeper
     environment:
-      KAFKA_LISTENERS: PLAINTEXT://:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      #KAFKA_LISTENERS: PLAINTEXT://:9092
+      #KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_DELETE_TOPIC_ENABLE: "true"
       KAFKA_CREATE_TOPICS: "Stocks:2:1,Quotes:2:1,Orders:2:1"
-  kafkaoffsetmonitor:
-    image: junxy/kafkaoffsetmonitor
-    container_name: offsetmonitor
+#  kafkaoffsetmonitor:
+#    image: kafkaoffsetmonitor
+#    container_name: offsetmonitor
+#    restart: always
+#    ports:
+#    - 8080:8080
+#    depends_on:
+#    - zookeeper
+#    - kafka
+#    environment:
+#      ZK_HOSTS: zookeeper:2181
+#      KAFKA_BROKERS: kafka:9092
+  database:
+    image: mysql
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
-    - 8080:8080
-    depends_on:
-    - zookeeper
-    - kafka
+      - 3306:3306
     environment:
-      ZK_HOSTS: "zookeeper:2181"
-      KAFKA_BROKERS: "kafka:9092"
+      MYSQL_ROOT_PASSWORD: mysql
