@@ -4,14 +4,14 @@ services:
     image: wurstmeister/zookeeper
     container_name: zookeeper
     ports:
-      - 2181:2181
+    - 2181:2181
   kafka:
     image: wurstmeister/kafka
     container_name: kafka
     ports:
-      - 9092:9092
+    - 9092:9092
     depends_on:
-      - zookeeper
+    - zookeeper
     environment:
       #KAFKA_LISTENERS: PLAINTEXT://:9092
       #KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
@@ -19,24 +19,33 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_DELETE_TOPIC_ENABLE: "true"
       KAFKA_CREATE_TOPICS: "Stocks:2:1,Quotes:2:1,Orders:2:1"
-#  kafkaoffsetmonitor:
-#    image: kafkaoffsetmonitor
-#    container_name: offsetmonitor
-#    restart: always
-#    ports:
-#    - 8080:8080
-#    depends_on:
-#    - zookeeper
-#    - kafka
-#    environment:
-#      ZK_HOSTS: zookeeper:2181
-#      KAFKA_BROKERS: kafka:9092
+  #  kafkaoffsetmonitor:
+  #    image: kafkaoffsetmonitor
+  #    container_name: offsetmonitor
+  #    restart: always
+  #    ports:
+  #    - 8080:8080
+  #    depends_on:
+  #    - zookeeper
+  #    - kafka
+  #    environment:
+  #      ZK_HOSTS: zookeeper:2181
+  #      KAFKA_BROKERS: kafka:9092
   database:
     image: mysql
     container_name: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
-      - 3306:3306
+    - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: mysql
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+    - 3000:3000
+    depends_on:
+    - database
+    environment:
+    - GF_PATHS_DATA=/var/lib/grafana
