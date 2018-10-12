@@ -40,6 +40,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: mysql
       MYSQL_DATABASE: tradingsystem
+    volumes:
+      - ./mysql/data:/docker-entrypoint-initdb.d
   grafana:
     image: grafana/grafana
     container_name: grafana
