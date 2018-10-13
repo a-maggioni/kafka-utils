@@ -15,21 +15,22 @@ services:
     environment:
       #KAFKA_LISTENERS: PLAINTEXT://:9092
       #KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      #KAFKA_ADVERTISED_HOST_NAME: 172.18.0.3
+      HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $$2}'"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_DELETE_TOPIC_ENABLE: "true"
       KAFKA_CREATE_TOPICS: "Stocks:2:1,Quotes:2:1,Orders:2:1"
-#  kafkaoffsetmonitor:
-##    image: kafkaoffsetmonitor
-#    build:
-#      context: ./kafkaoffsetmonitor
-#    container_name: offsetmonitor
-#    restart: always
-#    ports:
-#    - 8080:8080
-#    depends_on:
-#    - zookeeper
-#    - kafka
+  kafkaoffsetmonitor:
+#    image: kafkaoffsetmonitor
+    build:
+      context: ./kafkaoffsetmonitor
+    container_name: offsetmonitor
+    restart: always
+    ports:
+    - 8080:8080
+    depends_on:
+    - zookeeper
+    - kafka
   database:
     image: mysql
     container_name: mysql
